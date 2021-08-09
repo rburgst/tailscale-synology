@@ -1,3 +1,12 @@
-#!/bin/sh
+#!/bin/bash
+
+# If we are upgrading from DSM6->DSM7 we need to migrate state.
+# DSM6 builds are 1.X.Y-000Z, DSM7 builds are 1.X.Y-200Z
+if [[ "${SYNOPKG_OLD_PKGVER}" =~ "^1\.[0-9]*[1-9]\.[0-9]*[1-9]-0[0-9]{2}[1-9]$" ]]; then
+  if [[ "${SYNOPKG_PKGVER}" =~ "^1\.[0-9]*[1-9]\.[0-9]*[1-9]-2[0-9]{2}[1-9]$" ]]; then
+    mv /var/packages/Tailscale/etc/* /var/packages/Tailscale/var/
+    chown -R tailscale:tailscale /var/packages/Tailscale/var
+  fi
+fi
 
 exit 0
